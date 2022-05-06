@@ -24,6 +24,12 @@ async function run(){
             res.send(products);
         });
 
+        //get all products
+        app.get('/products', async (req, res) => {
+            const products = await productCollection.find({}).toArray();
+            res.send(products);
+        });
+
         //get product by id
         app.get('/product/:id', async (req, res) =>{
             const id = req.params.id;
@@ -31,18 +37,6 @@ async function run(){
             const product = await productCollection.findOne(query);
             res.send(product);
         });
-
-        //update product quantity
-        // app.put('/product/:id', async (req, res) => {
-        //     const id = req.params.id;
-        //     const query = {_id: ObjectID(id)};
-        //     const product = await productCollection.findOne(query);
-        //     const newQuantity = req.body.quantity;
-        //     const newProduct = {...product, quantity: newQuantity};
-        //     await productCollection.replaceOne(query, newProduct);
-        //     res.send(newProduct);
-        // })
-
 
         //update product quantity
         app.put('/product/:id', async (req, res) => {
