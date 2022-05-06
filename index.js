@@ -32,6 +32,28 @@ async function run(){
             res.send(product);
         });
 
+        //update product quantity
+        // app.put('/product/:id', async (req, res) => {
+        //     const id = req.params.id;
+        //     const query = {_id: ObjectID(id)};
+        //     const product = await productCollection.findOne(query);
+        //     const newQuantity = req.body.quantity;
+        //     const newProduct = {...product, quantity: newQuantity};
+        //     await productCollection.replaceOne(query, newProduct);
+        //     res.send(newProduct);
+        // })
+
+
+        //reduce product quantity by 1
+        app.put('/product/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = {_id: ObjectID(id)};
+            const product = await productCollection.findOne(query);
+            const newQuantity = product.quantity - 1;
+            const newProduct = {...product, quantity: newQuantity};
+            await productCollection.replaceOne(query, newProduct);
+            res.send(newProduct);
+        });
 
     } finally {
         // await client.close();
