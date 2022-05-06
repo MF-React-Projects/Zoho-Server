@@ -49,6 +49,14 @@ async function run(){
             res.send(newProduct);
         });
 
+        //delete product
+        app.delete('/products/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = {_id: ObjectID(id)};
+            const result = await productCollection.deleteOne(query);
+            res.send(result);
+        });
+
     } finally {
         // await client.close();
     }
