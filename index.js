@@ -26,6 +26,12 @@ async function run(){
 
         //get all products
         app.get('/products', async (req, res) => {
+            const products = await productCollection.find({}).toArray();
+            res.send(products);
+        });
+
+        //get products by user email
+        app.get('/myProducts', async (req, res) => {
             const email = req.query.email;
             const products = await productCollection.find({userEmail: email}).toArray();
             res.send(products);
@@ -75,13 +81,6 @@ async function run(){
             await productCollection.replaceOne(query, newProductWithId);
             res.send(newProductWithId);
         });
-
-        //get product by user email
-        // app.get('/products', async (req, res) => {
-        //     const email = req.query.email;
-        //     const products = await productCollection.find({email}).toArray();
-        //     res.send(products);
-        // });
 
     } finally {
         // await client.close();
