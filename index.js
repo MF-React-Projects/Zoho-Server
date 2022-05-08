@@ -49,13 +49,13 @@ async function run() {
         });
 
         //get first 6 products
-        app.get('/homeProducts', varifyJWT, async (req, res) => {
+        app.get('/homeProducts', async (req, res) => {
             const products = await productCollection.find({}).limit(6).toArray();
             res.send(products);
         });
 
         //get all products
-        app.get('/products', varifyJWT, async (req, res) => {
+        app.get('/products', async (req, res) => {
             const products = await productCollection.find({}).toArray();
             res.send(products);
         });
