@@ -61,15 +61,24 @@ async function run() {
 
         //get all products
         app.get('/products', async (req, res) => {
-            const products = await productCollection.find({}).toArray();
+            const page = parseInt(req.query.page);
+            const limit = parseInt(req.query.limit);
+
+            const products = await productCollection.find({}).skip(page * limit).limit(limit).toArray();
             res.send(products);
+        });
+
+        //get all products count
+        app.get('/productCount', async (req, res) => {
+            const count = await productCollection.countDocuments();
+            res.send({count});
         });
 
         //get products by user email
         app.get('/myProducts', varifyJWT, async (req, res) => {
             const decodedEmail = req.decoded.email;
             const email = req.query.email;
-            if(decodedEmail === email) {
+            if (decodedEmail === email) {
                 const products = await productCollection.find({userEmail: email}).toArray();
                 res.send(products);
             } else {
