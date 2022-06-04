@@ -36,6 +36,8 @@ async function run() {
     try {
         await client.connect();
         const productCollection = client.db('zoho').collection('products');
+        const reviewCollection = client.db('zoho').collection('reviews');
+        const blogCollection = client.db('zoho').collection('blogs');
 
         //auth
         app.post('/login', (req, res) => {
@@ -48,6 +50,9 @@ async function run() {
             });
         });
 
+        /*
+        * Products API
+        * */
         //get first 6 products
         app.get('/homeProducts', async (req, res) => {
             const products = await productCollection.find({}).limit(6).toArray();
@@ -117,6 +122,27 @@ async function run() {
             const newProductWithId = {...product, ...newProduct};
             await productCollection.replaceOne(query, newProductWithId);
             res.send(newProductWithId);
+        });
+
+        /*
+        * Blogs API
+        * */
+        //get blogs
+        app.get('/blogs', async (req, res) => {
+            const limit = parseInt(req.query.limit) || 0;
+            const blogs = await blogCollection.find({}).limit(limit).toArray();
+            res.send(blogs);
+        });
+
+        /*
+        * Review
+        */
+        //get reviews
+        app.get('/reviews', async (req, res) => {
+            const limit = parseInt(req.query.limit) || 0;
+            //lastest first
+            const reviews = await reviewCollection.find({}).sort({_id: -1}).limit(limit).toArray();
+            res.send(reviews);
         });
 
     } finally {
